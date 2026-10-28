@@ -33,6 +33,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#ifndef N64
 typedef struct
 {
 	uint8_t r;
@@ -40,6 +41,9 @@ typedef struct
 	uint8_t b;
 	uint8_t a;
 } color_t;
+#else
+#include <graphics.h>
+#endif
 extern color_t colorWhite;
 extern color_t colorRed;
 extern color_t colorGreen;

@@ -1,0 +1,53 @@
+# C-Dogs 64 - Nintendo 64 Makefile using Libdragon
+V = 1
+BUILD_DIR = build_n64
+SOURCE_DIR = .
+N64_MKDFS_ROOT = filesystem
+N64_ROM_TITLE = "C-Dogs 64"
+N64_ROM_SAVETYPE = eeprom16
+N64_ROM_REGIONFREE = true
+
+# Include directories
+CFLAGS += -Isrc -Isrc/cdogs -Isrc/n64/sdl_compat -Isrc/proto/nanopb -Isrc/json -Isrc/cdogs/yajl
+CFLAGS += -DN64 -DSTATIC -DNDEBUG
+
+# Sources
+CORE_SRCS = \
+	src/n64/main_n64.c \
+	src/cdogs/c_array.c \
+	src/cdogs/c_hashmap/hashmap.c \
+	src/cdogs/collision/collision.c \
+	src/cdogs/collision/minkowski_hex.c \
+	src/cdogs/mathc/mathc.c \
+	src/cdogs/aheasing/easing.c \
+	src/cdogs/yajl/yajl.c \
+	src/cdogs/yajl/yajl_alloc.c \
+	src/cdogs/yajl/yajl_buf.c \
+	src/cdogs/yajl/yajl_encode.c \
+	src/cdogs/yajl/yajl_gen.c \
+	src/cdogs/yajl/yajl_lex.c \
+	src/cdogs/yajl/yajl_parser.c \
+	src/cdogs/yajl/yajl_tree.c \
+	src/cdogs/yajl/yajl_version.c \
+	src/json/json.c \
+	src/proto/nanopb/pb_common.c \
+	src/proto/nanopb/pb_decode.c \
+	src/proto/nanopb/pb_encode.c \
+	src/proto/msg.pb.c
+
+CORE_OBJS = $(addprefix $(BUILD_DIR)/, $(CORE_SRCS:.c=.o))
+
+include $(N64_INST)/include/n64.mk
+
+all: cdogs64.z64
+
+cdogs64.z64: $(BUILD_DIR)/cdogs64.elf $(BUILD_DIR)/cdogs64.dfs
+
+$(BUILD_DIR)/cdogs64.dfs: $(shell find $(N64_MKDFS_ROOT) -type f 2>/dev/null)
+
+$(BUILD_DIR)/cdogs64.elf: $(CORE_OBJS)
+
+clean:
+	rm -rf $(BUILD_DIR) cdogs64.z64
+
+.PHONY: all clean

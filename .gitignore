@@ -104,6 +104,7 @@ missionpack/
 *.so.*
 *.swp
 Makefile.*
+!Makefile.n64
 *.tar.gz
 tmp
 .cdogs/
@@ -112,4 +113,8 @@ tmp
 Thumbs.db
 .config/
 *.blend1
+build_n64/
+*.z64
+*.v64
+*.dfs
 emscripten/
